@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-use Yii;
 use yii\web\Controller;
 use app\services\RBCService;
 
@@ -35,6 +34,8 @@ class SiteController extends Controller
      */
     public function actionIndex(): string
     {
-        return $this->render('index');
+        $objects = $this->RBCService->importNews();
+
+        return $this->render('index', ['objects' => $objects]);
     }
 }
