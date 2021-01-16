@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use Yii;
+use yii\helpers\FileHelper;
 use yii\web\Controller;
 use app\services\RBCService;
 
@@ -36,6 +38,7 @@ class SiteController extends Controller
     {
         $objects = $this->RBCService->importNews();
         $detailTexts = [];
+        $images = [];
 
         foreach ($objects as $object) {
             $model = $this->RBCService->getNewsByGuid($object->guid);
@@ -54,7 +57,13 @@ class SiteController extends Controller
     public function actionRbcDetail(string $guid): string
     {
         $model = $this->RBCService->getNewsByGuid($guid);
+        $filePath = Yii::getAlias('@webroot/images/'.$guid);
+        $images = FileHelper::findFiles($filePath);
+        $imageFiles = [];
+        foreach ($images as $image) {
+            $imageFiles[] = preg_replace("/^.*?(\/images\/[\w\d]+?\/[\w\d\.]+?)$/", "\\1", str_replace("\\", "/", $image));
+        }
 
-        return $this->render('detail', ['model' => $model]);
+        return $this->render('detail', ['model' => $model, 'images' => $imageFiles]);
     }
 }
