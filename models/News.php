@@ -47,6 +47,11 @@ class News extends ActiveRecord
         ];
     }
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
     public static function getById($id): ?News
     {
         return static::findOne(['id' => $id]);

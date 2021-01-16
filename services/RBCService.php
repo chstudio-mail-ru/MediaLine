@@ -2,6 +2,7 @@
 
 namespace app\services;
 
+use app\models\News;
 use app\repositories\NewsRepository;
 use app\services\dto\RBCDto;
 use Yii;
@@ -60,7 +61,7 @@ class RBCService
         preg_match_all("/<p>(.*?)<\/p>/i", $newsText[0], $matches);
         $newsText = "";
         foreach ($matches[1] as $partNews) {
-            $newsText .= "<div>".$partNews."</div>";
+            $newsText .= "<div>".strip_tags($partNews)."</div>";
         }
 
         return $newsText;
@@ -87,8 +88,8 @@ class RBCService
                     $newsDTO->enclosureType[] = (string)$enclosureItem->attributes()->type;
                     $newsDTO->enclosureLength[] = (string)$enclosureItem->attributes()->length;
                 }
-                $objects[] = $newsDTO;
                 $this->newsRepository->addNews($newsDTO, $this->getNewsText($newsDTO), self::class);
+                $objects[] = $newsDTO;
                 $this->loadNewsImages($newsDTO);
                 $count++;
             } else {
@@ -97,5 +98,15 @@ class RBCService
         }
 
         return $objects;
+    }
+
+    public function getNewsById($id): ?News
+    {
+        return $this->newsRepository->getById($id);
+    }
+
+    public function getNewsByGuid($guid): ?News
+    {
+        return $this->newsRepository->getByGuid($guid);
     }
 }

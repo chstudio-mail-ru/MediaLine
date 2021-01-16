@@ -35,7 +35,26 @@ class SiteController extends Controller
     public function actionIndex(): string
     {
         $objects = $this->RBCService->importNews();
+        $detailTexts = [];
 
-        return $this->render('index', ['objects' => $objects]);
+        foreach ($objects as $object) {
+            $model = $this->RBCService->getNewsByGuid($object->guid);
+            $detailTexts[$object->guid] = $model->text;
+        }
+
+        return $this->render('index', ['objects' => $objects, 'texts' => $detailTexts]);
+    }
+
+    /**
+     * Displays detail RBC news page.
+     *
+     * @param string $guid
+     * @return string
+     */
+    public function actionRbcDetail(string $guid): string
+    {
+        $model = $this->RBCService->getNewsByGuid($guid);
+
+        return $this->render('detail', ['model' => $model]);
     }
 }

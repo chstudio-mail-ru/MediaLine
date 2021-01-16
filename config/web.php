@@ -52,6 +52,7 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 '' => 'site/index',
+                'rbc-detail/<guid:[\w\d]+>' => 'site/rbc-detail',
             ],
         ],
     ],

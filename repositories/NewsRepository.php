@@ -13,6 +13,21 @@ class NewsRepository
         $this->newsModel = $news;
     }
 
+    public function getById($id): ?News
+    {
+        return $this->newsModel->getById($id);
+    }
+
+    public function getByGuid($guid): ?News
+    {
+        return $this->newsModel->getByGuid($guid);
+    }
+
+    public function getId(): int
+    {
+        return $this->newsModel->getId();
+    }
+
     public function addNews($newsDTO, $text, $source): bool
     {
         switch ($source) {
