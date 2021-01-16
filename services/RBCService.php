@@ -4,6 +4,7 @@ namespace app\services;
 
 use app\repositories\NewsRepository;
 use app\services\dto\RBCDto;
+use Yii;
 
 class RBCService
 {
@@ -26,7 +27,23 @@ class RBCService
 
     private function loadNewsImages(RBCDto $newsRecordDTO)
     {
+        $filePath = Yii::getAlias('@webroot/images/'.$newsRecordDTO->guid.'/');
+        if (!file_exists($filePath)) {
+            mkdir($filePath, 0777, true);
+        }
 
+        foreach ($newsRecordDTO->enclosureUrl as $key => $value) {
+            if (isset($newsRecordDTO->enclosureType[$key]) && ($newsRecordDTO->enclosureType[$key] == "image/jpeg" || $newsRecordDTO->enclosureType[$key] == "image/png")) {
+                $fileName = preg_replace("/^.*?\/([\w\d\.]+?)$/", "\\1", $value);
+                if (!file_exists($filePath.$fileName)) {
+                    $context = stream_context_create(self::BROWSER_OPTS);
+                    $image = file_get_contents($value, false, $context);
+                    $fp = fopen($filePath.$fileName,"w");
+                    fwrite($fp, $image);
+                    fclose($fp);
+                }
+            }
+        }
     }
 
     private function getNewsText(RBCDto $newsRecordDTO): ?string
@@ -42,7 +59,7 @@ class RBCService
         preg_match_all("/<p>(.*?)<\/p>/i", $newsText[0], $matches);
         $newsText = "";
         foreach ($matches[1] as $partNews) {
-            $newsText .= $partNews."<br /><br />";
+            $newsText .= "<div>".$partNews."</div>";
         }
 
         return $newsText;
@@ -71,6 +88,7 @@ class RBCService
                 }
                 $objects[] = $newsDTO;
                 $this->newsRepository->addNews($newsDTO, $this->getNewsText($newsDTO), self::class);
+                $this->loadNewsImages($newsDTO);
                 $count++;
             } else {
                 break;
