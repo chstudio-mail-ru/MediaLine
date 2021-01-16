@@ -27,6 +27,8 @@ class m210116_095647_news extends Migration
         $this->createIndex('source', 'news', 'source');
         $this->createIndex('guid', 'news', 'guid');
         $this->createIndex('date_news', 'news', 'date_news');
+
+        return true;
     }
 
     /**
@@ -40,7 +42,7 @@ class m210116_095647_news extends Migration
         $this->dropIndex("date_news", "news");
         $this->dropTable('news');
 
-        return false;
+        return true;
     }
 
     /*
