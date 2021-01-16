@@ -7,7 +7,7 @@ use app\services\RBCService;
 
 class SiteController extends Controller
 {
-    private $RBCService;
+    protected $RBCService;
 
     /**
      * {@inheritdoc}
