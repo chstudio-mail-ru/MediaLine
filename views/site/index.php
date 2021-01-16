@@ -16,7 +16,7 @@ $this->title = 'MediaLine';
         }
         echo '<div>'.date("d.m.Y H:i:s", strtotime($object->pubDate)).'</div>
         <div>'.$text.'</div>
-        <div><a href="/rbc-detail/'.$object->guid.'">Побробнее</a></div>';
+        <div><a href="/rbc-detail/'.$object->guid.'" title="'.$object->description.'">Побробнее</a></div>';
     }
     ?>
 </div>
