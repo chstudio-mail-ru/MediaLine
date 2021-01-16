@@ -38,7 +38,6 @@ class SiteController extends Controller
     {
         $objects = $this->RBCService->importNews();
         $detailTexts = [];
-        $images = [];
 
         foreach ($objects as $object) {
             $model = $this->RBCService->getNewsByGuid($object->guid);
