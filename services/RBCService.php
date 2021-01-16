@@ -17,6 +17,7 @@ class RBCService
             'header'=> "User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36\r\n"
         ],
     ];
+    const NUM_IMPORT_NEWS = 15;
 
     protected $newsRepository;
 
@@ -65,7 +66,7 @@ class RBCService
         return $newsText;
     }
 
-    public function importNews($numNews = 15): array
+    public function importNews($numNews = self::NUM_IMPORT_NEWS): array
     {
         $context = stream_context_create(self::BROWSER_OPTS);
         $xmlString = file_get_contents(self::RSS_URL, false, $context);
