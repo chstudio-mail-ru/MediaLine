@@ -21,11 +21,12 @@ class m210116_095647_news extends Migration
             'guid'=> $this->string(32)->notNull(),
             'date_add'=> $this->integer()->notNull(),
             'date_update'=> $this->integer()->null()->defaultValue(null),
-            'date_news'=> $this->string(19)->notNull(),
+            'date_news'=> $this->dateTime()->notNull(),
         ]);
 
         $this->createIndex('source', 'news', 'source');
         $this->createIndex('guid', 'news', 'guid');
+        $this->createIndex('date_news', 'news', 'date_news');
     }
 
     /**
@@ -36,6 +37,7 @@ class m210116_095647_news extends Migration
         $this->dropPrimaryKey("id", "news");
         $this->dropIndex("source", "news");
         $this->dropIndex("guid", "news");
+        $this->dropIndex("date_news", "news");
         $this->dropTable('news');
 
         return false;

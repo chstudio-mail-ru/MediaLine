@@ -56,7 +56,7 @@ class RBCService
         $count = 0;
         $objects = [];
         foreach ($xmlObject->channel->item as $item) {
-            if ($count <= $numNews) {
+            if ($count < $numNews) {
                 $newsDTO = new RBCDto();
                 $newsDTO->title = (string) $item->title;
                 $newsDTO->link = (string) $item->link;
