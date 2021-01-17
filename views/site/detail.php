@@ -14,6 +14,7 @@ $this->title = $model->title;
         echo '  <img src="'.$imgUrl.'" alt="'.$model->title.'" />';
         echo '</div>';
     }
+    echo '<div>'.date("d.m.Y H:i:s", strtotime($model->date_news)).'</div>';
     echo "<div>".$model->text."</div>";
 ?>
 </div>
