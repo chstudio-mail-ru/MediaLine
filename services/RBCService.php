@@ -61,7 +61,7 @@ class RBCService
         preg_match_all("/<p>(.*?)<\/p>/i", $newsText[0], $matches);
         $newsText = "";
         foreach ($matches[1] as $partNews) {
-            $newsText .= "<div>".strip_tags($partNews)."</div>";
+            $newsText .= "<div>".strip_tags($partNews)."</div>";    //TODO: убрать <div>
         }
 
         return $newsText;
@@ -88,7 +88,8 @@ class RBCService
                     $newsDTO->enclosureType[] = (string)$enclosureItem->attributes()->type;
                     $newsDTO->enclosureLength[] = (string)$enclosureItem->attributes()->length;
                 }
-                $this->newsRepository->addNews($newsDTO, $this->getNewsText($newsDTO), self::class);
+                $newsDTO->text = $this->getNewsText($newsDTO);
+                $this->newsRepository->addNews($newsDTO, self::class);
                 $objects[] = $newsDTO;
                 $this->loadNewsImages($newsDTO);
                 $count++;
@@ -100,13 +101,49 @@ class RBCService
         return $objects;
     }
 
-    public function getNewsById($id): ?News
+    private function getDTO(News $model): RBCDto
     {
-        return $this->newsRepository->getById($id);
+        $dtoEntity = new RBCDto();
+        $dtoEntity->title = $model->title;
+        $dtoEntity->text = $model->text;
+        $dtoEntity->link = $model->link;
+        $dtoEntity->description = $model->description;
+        $dtoEntity->author = $model->author;
+        $dtoEntity->guid = $model->guid;
+        $dtoEntity->pubDate = $model->date_news;
+
+        return $dtoEntity;
     }
 
-    public function getNewsByGuid($guid): ?News
+    public function getNewsById($id): RBCDto
     {
-        return $this->newsRepository->getByGuid($guid);
+        return $this->getDTO($this->newsRepository->getById($id));
+    }
+
+    public function getNewsByGuid($guid): RBCDto
+    {
+        return $this->getDTO($this->newsRepository->getByGuid($guid));
+    }
+
+    public function getAll($source = "app\services\RBCService"): array
+    {
+        $models = $this->newsRepository->getAll($source);
+        $dtoArray = [];
+        foreach ($models as $model) {
+            $dtoArray[] = $this->getDTO($model);
+        }
+
+        return $dtoArray;
+    }
+
+    public function getLimit($source = "app\services\RBCService", $limit = 15): array
+    {
+        $models = $this->newsRepository->getLimit($source, $limit);
+        $dtoArray = [];
+        foreach ($models as $model) {
+            $dtoArray[] = $this->getDTO($model);
+        }
+
+        return $dtoArray;
     }
 }

@@ -1,20 +1,22 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $model app\models\News */
+/* @var $dto app\services\dto\RBCDto */
 /* @var $images array string */
 
-$this->title = $model->title;
+$this->title = $dto->title;
 ?>
 <div class="site-index">
 <?php
-    echo "<h1>".$model->title."</h1>";
+    echo "<h1>".$dto->title."</h1>";
+    echo "<div>".$dto->description."</div>";
     foreach ($images as $imgUrl) {
         echo '<div>';
-        echo '  <img src="'.$imgUrl.'" alt="'.$model->title.'" />';
+        echo '  <img src="'.$imgUrl.'" alt="'.$dto->title.'" />';
         echo '</div>';
     }
-    echo '<div>'.date("d.m.Y H:i:s", strtotime($model->date_news)).'</div>';
-    echo "<div>".$model->text."</div>";
+    echo '<div>'.date("d.m.Y H:i:s", strtotime($dto->pubDate)).'</div>';
+    echo "<div>".$dto->text."</div>";
+    echo ($dto->author)? "<div>Автор:".$dto->author."</div>" : null;
 ?>
 </div>

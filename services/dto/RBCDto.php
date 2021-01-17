@@ -5,6 +5,7 @@ namespace app\services\dto;
 class RBCDto
 {
     public $title;
+    public $text;
     public $link;
     public $description;
     public $author;

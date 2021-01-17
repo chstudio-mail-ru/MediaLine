@@ -36,15 +36,11 @@ class SiteController extends Controller
      */
     public function actionIndex(): string
     {
-        $objects = $this->RBCService->importNews();
-        $detailTexts = [];
+        $objects = $this->RBCService->importNews(); //TODO: перенести $this->RBCService->importNews() в commands и настроить запуск по крону,
+                                                    //заменить на сл. строку после настройки крона
+        //$objects = $this->RBCService->getLimit();
 
-        foreach ($objects as $object) {
-            $model = $this->RBCService->getNewsByGuid($object->guid);
-            $detailTexts[$object->guid] = $model->text;
-        }
-
-        return $this->render('index', ['objects' => $objects, 'texts' => $detailTexts]);
+        return $this->render('index', ['objects' => $objects]);
     }
 
     /**
@@ -55,7 +51,7 @@ class SiteController extends Controller
      */
     public function actionRbcDetail(string $guid): string
     {
-        $model = $this->RBCService->getNewsByGuid($guid);
+        $dto = $this->RBCService->getNewsByGuid($guid);
         $filePath = Yii::getAlias('@webroot/images/'.$guid);
         $images = FileHelper::findFiles($filePath);
         $imageFiles = [];
@@ -63,6 +59,6 @@ class SiteController extends Controller
             $imageFiles[] = preg_replace("/^.*?(\/images\/[\w\d]+?\/[\wА-Яа-я\d\-_\s\.]+?)$/u", "\\1", str_replace("\\", "/", $image));
         }
 
-        return $this->render('detail', ['model' => $model, 'images' => $imageFiles]);
+        return $this->render('detail', ['dto' => $dto, 'images' => $imageFiles]);
     }
 }

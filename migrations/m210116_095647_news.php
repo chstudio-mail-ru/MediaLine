@@ -17,6 +17,8 @@ class m210116_095647_news extends Migration
             'title' => $this->string(255)->notNull(),
             'text' => $this->text()->notNull(),
             'link'=> $this->string(255)->notNull(),
+            'description'=> $this->string(1024)->notNull(),
+            'author'=> $this->string(255)->notNull(),
             'source'=> $this->string(32)->notNull(),
             'guid'=> $this->string(32)->notNull(),
             'date_add'=> $this->integer()->notNull(),

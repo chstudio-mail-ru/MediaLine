@@ -28,14 +28,16 @@ class NewsRepository
         return $this->newsModel->getId();
     }
 
-    public function addNews($newsDTO, $text, $source): bool
+    public function addNews($newsDTO, $source): bool
     {
         switch ($source) {
             case 'app\services\RBCService':
                 $objNews = new News();
                 $objNews->title = $newsDTO->title;
                 $objNews->link = $newsDTO->link;
-                $objNews->text = $text;
+                $objNews->description = $newsDTO->description;
+                $objNews->author = $newsDTO->author;
+                $objNews->text = $newsDTO->text;
                 $objNews->guid = $newsDTO->guid;
                 $objNews->source = $source;
                 $objNews->date_add = time();
@@ -54,5 +56,15 @@ class NewsRepository
         }
 
         return $result;
+    }
+
+    public function getAll($source = ""): array
+    {
+        return $this->newsModel->getAll($source);
+    }
+
+    public function getLimit($source = "", $limit = 15): array
+    {
+        return $this->newsModel->getLimit($source, $limit);
     }
 }

@@ -11,7 +11,9 @@ use yii\db\ActiveRecord;
  * @property string $title
  * @property string $text
  * @property string $link
+ * @property string $description
  * @property string $source
+ * @property string $author
  * @property string $guid
  * @property integer $date_add
  * @property integer $date_update
@@ -66,6 +68,7 @@ class News extends ActiveRecord
     {
         return self::find()
             ->where(['source' => $source])
+            ->orderBy(['date_news' => SORT_DESC])
             ->all();
     }
 
@@ -73,6 +76,7 @@ class News extends ActiveRecord
     {
         return self::find()
             ->where(['source' => $source])
+            ->orderBy(['date_news' => SORT_DESC])
             ->limit($limit)
             ->all();
     }
