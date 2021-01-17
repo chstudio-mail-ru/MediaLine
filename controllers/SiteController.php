@@ -60,7 +60,7 @@ class SiteController extends Controller
         $images = FileHelper::findFiles($filePath);
         $imageFiles = [];
         foreach ($images as $image) {
-            $imageFiles[] = preg_replace("/^.*?(\/images\/[\w\d]+?\/[\w\d\.]+?)$/", "\\1", str_replace("\\", "/", $image));
+            $imageFiles[] = preg_replace("/^.*?(\/images\/[\w\d]+?\/[\wА-Яа-я\d\-_\s\.]+?)$/u", "\\1", str_replace("\\", "/", $image));
         }
 
         return $this->render('detail', ['model' => $model, 'images' => $imageFiles]);
