@@ -20,8 +20,6 @@ $this->title = $dto->title;
     foreach ($dto->newsParagraphs as $newsParagraph) {
         if (is_string($newsParagraph)) {
             echo '<div>'.$newsParagraph.'</div>';
-        } elseif (is_object($newsParagraph)) {
-            echo '<div>'.$newsParagraph->text.'</div>';
         }
    }
     echo ($dto->author)? "<div>Автор:".$dto->author."</div>" : null;

@@ -21,8 +21,6 @@ $this->title = 'MediaLine';
             foreach ($object->newsParagraphs as $newsParagraph) {
                 if (is_string($newsParagraph)) {
                     $text .= '<div>'.$newsParagraph.'</div>';
-                } elseif (is_object($newsParagraph)) {
-                    $text .= '<div>'.$newsParagraph->text.'</div>';
                 }
             }
             if (mb_strlen(strip_tags($text)) > 200) {

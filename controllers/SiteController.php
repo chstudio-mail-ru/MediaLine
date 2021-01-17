@@ -37,9 +37,9 @@ class SiteController extends Controller
      */
     public function actionIndex(): string
     {
-        $objects = $this->RBCService->importNews(); //TODO: перенести $this->RBCService->importNews() в commands и настроить запуск по крону,
+        //$objects = $this->RBCService->importNews(); //TODO: перенести $this->RBCService->importNews() в commands и настроить запуск по крону,
                                                     //заменить на сл. строку после настройки крона
-        //$objects = $this->RBCService->getLimit("app\services\RBCService", 15);
+        $objects = $this->RBCService->getLimit("app\services\RBCService", 15);
 
         return $this->render('index', ['objects' => $objects]);
     }

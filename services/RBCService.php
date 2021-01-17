@@ -115,7 +115,10 @@ class RBCService
         $dtoEntity->author = $model->author;
         $dtoEntity->guid = $model->guid;
         $dtoEntity->pubDate = $model->date_news;
-        $dtoEntity->newsParagraphs = $model->getNewsParagraphs();
+        $newsParagraphs = $model->getNewsParagraphs();
+        foreach ($newsParagraphs as $newsParagraph) {
+            $dtoEntity->newsParagraphs[] = $newsParagraph->text;
+        }
 
         return $dtoEntity;
     }
