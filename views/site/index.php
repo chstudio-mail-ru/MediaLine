@@ -9,8 +9,8 @@ $this->title = 'MediaLine';
 <div class="site-index">
     <?php
     foreach ($objects as $object) {
-        if (mb_strlen($texts[$object->guid]) > 200) {
-            $text = mb_substr($texts[$object->guid], 0, 200)."...";
+        if (mb_strlen(strip_tags($texts[$object->guid])) > 200) {
+            $text = mb_substr(strip_tags($texts[$object->guid]), 0, 200)."...";
         } else {
             $text = $texts[$object->guid];
         }
