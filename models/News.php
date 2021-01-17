@@ -29,7 +29,7 @@ class News extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'text', 'guid'], 'required'],
+            [['title', 'guid'], 'required'],
             [['title', 'text', 'link', 'source', 'guid'], 'string'],
             [['date_news'], 'date', 'format' => 'php:d.m.Y', 'skipOnEmpty' => true, 'message' => 'Неправильный формат',
                 'when' => function () {
@@ -79,5 +79,10 @@ class News extends ActiveRecord
             ->orderBy(['date_news' => SORT_DESC])
             ->limit($limit)
             ->all();
+    }
+
+    public function getNewsParagraphs(): array
+    {
+        return $this->hasMany(NewsParagraph::class, ['news_id' => 'id'])->all();
     }
 }

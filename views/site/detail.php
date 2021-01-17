@@ -17,6 +17,9 @@ $this->title = $dto->title;
     }
     echo '<div>'.date("d.m.Y H:i:s", strtotime($dto->pubDate)).'</div>';
     echo "<div>".$dto->text."</div>";
+    foreach ($dto->newsParagraphs as $newsParagraph) {
+        echo '<div>'.$newsParagraph->text.'</div>';
+   }
     echo ($dto->author)? "<div>Автор:".$dto->author."</div>" : null;
 ?>
 </div>

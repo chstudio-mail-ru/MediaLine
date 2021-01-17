@@ -3,6 +3,7 @@
 namespace app\services;
 
 use app\models\News;
+use app\models\NewsParagraph;
 use app\repositories\NewsRepository;
 use app\services\dto\RBCDto;
 use Yii;
@@ -48,7 +49,7 @@ class RBCService
         }
     }
 
-    private function getNewsText(RBCDto $newsRecordDTO): ?string
+    private function getNewsText(RBCDto $newsRecordDTO): array
     {
         $context = stream_context_create(self::BROWSER_OPTS);
         $document = file_get_contents($newsRecordDTO->link, false, $context);
@@ -56,15 +57,15 @@ class RBCService
         if (isset($newsText[1])) {
             $newsText = explode(self::BODY_NEWS_LAST_TAG, $newsText[1]);
         } else {
-            return null;
+            return [];
         }
         preg_match_all("/<p>(.*?)<\/p>/i", $newsText[0], $matches);
-        $newsText = "";
+        $newsParagraphs = [];
         foreach ($matches[1] as $partNews) {
-            $newsText .= "<div>".strip_tags($partNews)."</div>";    //TODO: убрать <div>
+            $newsParagraphs[] = strip_tags($partNews);
         }
 
-        return $newsText;
+        return $newsParagraphs;
     }
 
     public function importNews($numNews = self::NUM_IMPORT_NEWS): array
@@ -88,7 +89,7 @@ class RBCService
                     $newsDTO->enclosureType[] = (string)$enclosureItem->attributes()->type;
                     $newsDTO->enclosureLength[] = (string)$enclosureItem->attributes()->length;
                 }
-                $newsDTO->text = $this->getNewsText($newsDTO);
+                $newsDTO->newsParagraphs = $this->getNewsText($newsDTO);
                 $this->newsRepository->addNews($newsDTO, self::class);
                 $objects[] = $newsDTO;
                 $this->loadNewsImages($newsDTO);
@@ -114,6 +115,7 @@ class RBCService
         $dtoEntity->author = $model->author;
         $dtoEntity->guid = $model->guid;
         $dtoEntity->pubDate = $model->date_news;
+        $dtoEntity->newsParagraphs = $model->getNewsParagraphs();
 
         return $dtoEntity;
     }

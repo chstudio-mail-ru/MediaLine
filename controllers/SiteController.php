@@ -39,7 +39,7 @@ class SiteController extends Controller
     {
         $objects = $this->RBCService->importNews(); //TODO: перенести $this->RBCService->importNews() в commands и настроить запуск по крону,
                                                     //заменить на сл. строку после настройки крона
-        //$objects = $this->RBCService->getLimit();
+        //$objects = $this->RBCService->getLimit("app\services\RBCService", 15);
 
         return $this->render('index', ['objects' => $objects]);
     }

@@ -15,7 +15,7 @@ class m210116_095647_news extends Migration
         $this->createTable('news', [
             'id' => $this->primaryKey(),
             'title' => $this->string(255)->notNull(),
-            'text' => $this->text()->notNull(),
+            'text' => $this->text()->null(),
             'link'=> $this->string(255)->notNull(),
             'description'=> $this->string(1024)->notNull(),
             'author'=> $this->string(255)->notNull(),

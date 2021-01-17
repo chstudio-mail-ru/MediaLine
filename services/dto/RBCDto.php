@@ -14,4 +14,5 @@ class RBCDto
     public $enclosureUrl = [];
     public $enclosureType = [];
     public $enclosureLength = [];
+    public $newsParagraphs = [];
 }

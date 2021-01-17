@@ -3,6 +3,7 @@
 namespace app\repositories;
 
 use app\models\News;
+use app\models\NewsParagraph;
 
 class NewsRepository
 {
@@ -43,9 +44,18 @@ class NewsRepository
                 $objNews->date_add = time();
                 $objNews->date_news = date("Y-m-d H:i:s", strtotime($newsDTO->pubDate));
                 $newsRepository = new self($objNews);
-                $exists = $newsRepository->newsModel->getByGuid($newsDTO->guid);
-                if (!$exists) {
+                $existsModel = $newsRepository->newsModel->getByGuid($newsDTO->guid);
+                if (!$existsModel) {
                     $result = $newsRepository->newsModel->save();
+                    if ($result) {
+                        foreach ($newsDTO->newsParagraphs as $newsParagraph) {
+                            $objNewsParagraph = new NewsParagraph();
+                            $objNewsParagraph->news_id = $newsRepository->newsModel->getId();
+                            $objNewsParagraph->text = $newsParagraph;
+                            $objNewsParagraph->date_add = time();
+                            $objNewsParagraph->save();
+                        }
+                    }
                 } else {
                     $result = false;
                 }
