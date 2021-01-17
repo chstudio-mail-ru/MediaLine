@@ -6,6 +6,7 @@ use Yii;
 use yii\helpers\FileHelper;
 use yii\web\Controller;
 use app\services\RBCService;
+use yii\web\NotFoundHttpException;
 
 class SiteController extends Controller
 {
@@ -48,12 +49,20 @@ class SiteController extends Controller
      *
      * @param string $guid
      * @return string
+     * @throws NotFoundHttpException
      */
     public function actionRbcDetail(string $guid): string
     {
         $dto = $this->RBCService->getNewsByGuid($guid);
+        if (!$dto) {
+            throw new NotFoundHttpException('Page not found.');
+        }
         $filePath = Yii::getAlias('@webroot/images/'.$guid);
-        $images = FileHelper::findFiles($filePath);
+        if (is_dir($filePath)) {
+            $images = FileHelper::findFiles($filePath);
+        } else {
+            $images = [];
+        }
         $imageFiles = [];
         foreach ($images as $image) {
             $imageFiles[] = preg_replace("/^.*?(\/images\/[\w\d]+?\/[\wА-Яа-я\d\-_\s\.]+?)$/u", "\\1", str_replace("\\", "/", $image));

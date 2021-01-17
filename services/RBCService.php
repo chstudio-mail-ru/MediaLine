@@ -101,8 +101,11 @@ class RBCService
         return $objects;
     }
 
-    private function getDTO(News $model): RBCDto
+    private function getDTO(?News $model): ?RBCDto
     {
+        if (!$model) {
+            return null;
+        }
         $dtoEntity = new RBCDto();
         $dtoEntity->title = $model->title;
         $dtoEntity->text = $model->text;
@@ -115,12 +118,12 @@ class RBCService
         return $dtoEntity;
     }
 
-    public function getNewsById($id): RBCDto
+    public function getNewsById($id): ?RBCDto
     {
         return $this->getDTO($this->newsRepository->getById($id));
     }
 
-    public function getNewsByGuid($guid): RBCDto
+    public function getNewsByGuid($guid): ?RBCDto
     {
         return $this->getDTO($this->newsRepository->getByGuid($guid));
     }
